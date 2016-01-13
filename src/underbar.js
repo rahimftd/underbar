@@ -311,6 +311,27 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+
+    var argTracker = {};
+
+    function argToString(args) {
+      var argStr = "";
+      for (var i = 0; i < args.length; i++) {
+        argStr += args[i];
+      }
+      return argStr;
+    }
+
+    return function() {
+      var hash = argToString(arguments);
+      if (argTracker[hash] === undefined) {
+        argTracker[hash] = func.apply(this, arguments);
+        return argTracker[hash];
+      } else {
+        return argTracker[hash];
+      }
+        
+    }
   };
 
   // Delays a function for the given number of milliseconds, and then calls
